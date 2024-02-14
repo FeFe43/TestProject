@@ -5,6 +5,7 @@ import static frc.robot.Constants.motorControllers.leftMotor1;
 import static frc.robot.Constants.motorControllers.rightMotor1;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -18,24 +19,26 @@ public class PID {
          public static final DoubleSubscriber ty = table.getDoubleTopic("ty").subscribe(0);
          public static final DoubleSubscriber ta = table.getDoubleTopic("ta").subscribe(0);
          public static final DoubleSubscriber tz = table.getDoubleTopic("tz").subscribe(0);
+         public static final DoubleSubscriber tv = table.getDoubleTopic("tv").subscribe(0);
          public static double lastx = 0;
-    public static void limeLight() {
+    
+         public static void limeLight() {
 
          double x = tx.get();
          double y = ty.get();
          double area = ta.get();
          double distance = tz.get();
 
-         double ckP = 0.009;
+         double ckP = 0.01;
          double ckI = 0.00;
          double ckD = 0;
 
-         double mkP = 0.1;
+         double mkP = 0.25;
          double mkI = 0;
          double mkD = 0;
 
          double error = x;
-         boolean foundTag = false;
+         double foundTag = tv.get();
 
          PIDController centerRobot = new PIDController(ckP, ckI, ckD);
          PIDController moveTowardTag = new PIDController(mkP, mkI, mkD);
@@ -43,8 +46,9 @@ public class PID {
          if(x != 0){
             lastx = x;
          }
+         System.out.println(ta.get());
 
-         if (x == 0 && y == 0 && distance == 0) {
+         if (foundTag == 0) {
             if (lastx > 0) {
             leftMotor1.set(-0.15);
             rightMotor1.set(0.15);
@@ -55,15 +59,12 @@ public class PID {
             leftMotor1.set(0.15);
             rightMotor1.set(-0.15);
             }
-        } else {
-         foundTag = true;
-      }
+        }
          
-        if (foundTag == true) {
+        if (foundTag == 1) {
             if (Math.abs(x) < 10) {
-              leftMotor1.set(-0.2);
-              rightMotor1.set(-0.2);
-       
+            leftMotor1.set(-moveTowardTag.calculate(distance, 0.9));
+            rightMotor1.set(-moveTowardTag.calculate(distance, 0.9));
          } else {
             if (error > 0 ) {
             leftMotor1.set(centerRobot.calculate(error, 0 ));
