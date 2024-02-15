@@ -2,6 +2,8 @@ package frc.robot.Subsystems;
 
 import static frc.robot.Constants.motorControllers.*;
 
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
+
 public class Drivetrain { 
     
     public static void tankDrive() {
@@ -14,8 +16,8 @@ public class Drivetrain {
     left = left * 1.3;
     right = right * 1.3;
     } 
-    leftMotor1.set(left);
-    rightMotor1.set(-right);
+    leftMotor1.set(TalonSRXControlMode.PercentOutput, left);
+    rightMotor1.set(TalonSRXControlMode.PercentOutput, -right);
 }
 public static void arcadeDrive() {
     double speed = controller.getRightY() * 0.5;
@@ -29,8 +31,8 @@ public static void arcadeDrive() {
     left = left * 1.3;
     right = right * 1.3;
     } 
-    leftMotor1.set(left);
-    rightMotor1.set(right);
+    leftMotor1.set(TalonSRXControlMode.PercentOutput, left);
+    rightMotor1.set(TalonSRXControlMode.PercentOutput, right);
 }
 }
 

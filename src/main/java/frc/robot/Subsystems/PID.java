@@ -4,6 +4,8 @@ import static frc.robot.Constants.motorControllers.controller;
 import static frc.robot.Constants.motorControllers.leftMotor1;
 import static frc.robot.Constants.motorControllers.rightMotor1;
 
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.networktables.DoubleSubscriber;
@@ -50,29 +52,29 @@ public class PID {
 
          if (foundTag == 0) {
             if (lastx > 0) {
-            leftMotor1.set(-0.15);
-            rightMotor1.set(0.15);
+            leftMotor1.set(TalonSRXControlMode.PercentOutput, -0.15);
+            rightMotor1.set(TalonSRXControlMode.PercentOutput, 0.15);
             } else if (lastx < 0) {
-            leftMotor1.set(0.15);
-            rightMotor1.set(-0.15);
+            leftMotor1.set(TalonSRXControlMode.PercentOutput, 0.15);
+            rightMotor1.set(TalonSRXControlMode.PercentOutput, -0.15);
             } else {
-            leftMotor1.set(0.15);
-            rightMotor1.set(-0.15);
+            leftMotor1.set(TalonSRXControlMode.PercentOutput, 0.15);
+            rightMotor1.set(TalonSRXControlMode.PercentOutput, -0.15);
             }
         }
          
         if (foundTag == 1) {
             if (Math.abs(x) < 10) {
-            leftMotor1.set(-moveTowardTag.calculate(distance, 0.9));
-            rightMotor1.set(-moveTowardTag.calculate(distance, 0.9));
+            leftMotor1.set(TalonSRXControlMode.PercentOutput, -moveTowardTag.calculate(distance, 0.9));
+            rightMotor1.set(TalonSRXControlMode.PercentOutput, -moveTowardTag.calculate(distance, 0.9));
          } else {
             if (error > 0 ) {
-            leftMotor1.set(centerRobot.calculate(error, 0 ));
-            rightMotor1.set(-centerRobot.calculate(error, 0 ));
+            leftMotor1.set(TalonSRXControlMode.PercentOutput, centerRobot.calculate(error, 0 ));
+            rightMotor1.set(TalonSRXControlMode.PercentOutput, -centerRobot.calculate(error, 0 ));
          } else if (error < 0 ) {
             double error1 = Math.abs(error);
-            leftMotor1.set(-centerRobot.calculate(error1, 0 ));
-            rightMotor1.set(centerRobot.calculate(error1, 0 ));
+            leftMotor1.set(TalonSRXControlMode.PercentOutput, -centerRobot.calculate(error1, 0 ));
+            rightMotor1.set(TalonSRXControlMode.PercentOutput, centerRobot.calculate(error1, 0 ));
          }
          }
         }

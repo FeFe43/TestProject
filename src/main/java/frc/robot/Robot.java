@@ -7,8 +7,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.*;
 import frc.robot.Subsystems.Drivetrain;
 import frc.robot.Subsystems.PID;
+import frc.robot.Subsystems.PathPlanner;
 
 import static frc.robot.Constants.motorControllers.*;
+
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 
 /**
  *
@@ -31,6 +34,8 @@ public class Robot extends TimedRobot {
    rightMotor2.follow(rightMotor1);
    rightMotor1.setInverted(true);
    rightMotor2.setInverted(true);
+
+   
   }
 
   @Override
@@ -41,7 +46,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    PID.limeLight();
+    if (controller.getAButton() == true ) {
+      PID.limeLight();
+    }
+    PathPlanner.path();
   }
 
   @Override
